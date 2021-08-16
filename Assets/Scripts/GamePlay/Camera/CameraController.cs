@@ -8,11 +8,13 @@ namespace GamePlay.Camera
     public class CameraController : MonoBehaviour
     {
         public Transform target;
-
+        [SerializeField] private float _followCoef = 100;
 
         private void Update()
-        {
-            this.transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
+        {  
+            Vector2 currentPos = transform.position ;
+            Vector2 targetPos = target.position;
+            transform.position = (Vector3)Vector2.Lerp(currentPos, targetPos, Time.deltaTime * _followCoef) - Vector3.forward;
         }
     }
 }

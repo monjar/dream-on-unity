@@ -10,10 +10,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float _horizontalMoveSpeed = 10f;
     [SerializeField] private float _jumpPower = 10f;
+    [SerializeField] private float _jumpHorizontalSpeedCoef = 0.5f;
     [SerializeField] private float _fallDistanceThreshold = 0.5f;
 
-    [SerializeField]
-    private LayerMask groundLayerMask;
+    [SerializeField] private LayerMask groundLayerMask;
 
     private void Start()
     {
@@ -27,15 +27,18 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-        _rigidbody.AddForce(new Vector2(0, _jumpPower));
-    }
-
-    private void Update()
-    {
         if (IsGrounded())
         {
-            _rigidbody.velocity = new Vector2(_moveVelocity.x, _rigidbody.velocity.y);
+            _rigidbody.AddForce(new Vector2(0, _jumpPower), ForceMode2D.Impulse);
         }
+    }
+
+    private void FixedUpdate()
+    {
+        _rigidbody.velocity = new Vector2(
+            _moveVelocity.x * (IsGrounded() ? 1 : _jumpHorizontalSpeedCoef),
+            _rigidbody.velocity.y
+        );
     }
 
     private bool IsGrounded()
