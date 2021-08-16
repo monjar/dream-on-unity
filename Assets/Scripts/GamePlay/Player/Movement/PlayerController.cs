@@ -35,10 +35,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rigidbody.velocity = new Vector2(
-            _moveVelocity.x * (IsGrounded() ? 1 : _jumpHorizontalSpeedCoef),
-            _rigidbody.velocity.y
-        );
+        _rigidbody.velocity = new Vector2(_moveVelocity.x, _rigidbody.velocity.y);
     }
 
     private bool IsGrounded()
