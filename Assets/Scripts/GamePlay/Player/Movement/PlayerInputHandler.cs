@@ -1,18 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerInputHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private PlayerController _playerController;
+
+    private void Start()
     {
-        
+        _playerController = GetComponent<PlayerController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        var horizontalAxis = Input.GetAxis("Horizontal");
+        _playerController.SetHorizontalVelocity(horizontalAxis);
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            _playerController.Jump();
+        }
     }
 }

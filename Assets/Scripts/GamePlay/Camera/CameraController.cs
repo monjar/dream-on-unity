@@ -1,18 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+namespace GamePlay.Camera
 {
-    // Start is called before the first frame update
-    void Start()
+    public class CameraController : MonoBehaviour
     {
-        
-    }
+        public Transform target;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+
+        private void Update()
+        {
+            this.transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
+        }
     }
 }
