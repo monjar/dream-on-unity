@@ -70,7 +70,6 @@ public class PlayerController : MonoBehaviour
         {
             if (IsGrounded())
             {
-                
                 _animator.SetBool("IsJumping", false);
                 _animator.SetBool("IsFalling", false);
                 _animator.SetBool("DidLand", true);

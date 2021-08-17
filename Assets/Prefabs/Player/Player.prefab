@@ -207,7 +207,7 @@ MonoBehaviour:
   _horizontalMoveSpeed: 5
   _jumpPower: 0.5
   _jumpHorizontalSpeedCoef: 0.5
-  _fallDistanceThreshold: 0.6
+  _fallDistanceThreshold: 0.1
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 64
