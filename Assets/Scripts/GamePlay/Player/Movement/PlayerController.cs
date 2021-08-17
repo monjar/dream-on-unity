@@ -18,8 +18,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _jumpPower = 10f;
     [SerializeField] private float _jumpHorizontalSpeedCoef = 0.5f;
     [SerializeField] private float _fallDistanceThreshold = 0.5f;
+    [SerializeField] private float _blockDistanceThreshold = 0.1f;
+    [SerializeField] private float _blockStepSize = 0.1f;
 
     [SerializeField] private LayerMask groundLayerMask;
+    [SerializeField] private LayerMask blockLayerMask;
 
     private void Start()
     {
@@ -28,8 +31,16 @@ public class PlayerController : MonoBehaviour
 
     public void SetHorizontalVelocity(float velocity)
     {
-        _moveVelocity.x = velocity * _horizontalMoveSpeed;
-        _isRunningInput = Mathf.Abs(velocity) > 0.3f;
+        if (!IsDirBlocked(velocity > 0 ? 1 : -1) && Mathf.Abs(velocity) > 0.2f)
+        {
+            _moveVelocity.x = velocity * _horizontalMoveSpeed;
+            _isRunningInput = true;
+        }
+        else
+        {
+            _moveVelocity.x = 0;
+            _isRunningInput = false;
+        }
     }
 
     public void Jump()
@@ -66,7 +77,7 @@ public class PlayerController : MonoBehaviour
             _spriteRenderer.flipX = _rigidbody.velocity.x < 0;
 
         float verticalVelocity = _rigidbody.velocity.y;
-        if (Mathf.Abs(verticalVelocity) < 0.1f && (_isJumping || _isFalling))
+        if (Mathf.Abs(verticalVelocity) < 2f && (_isJumping || _isFalling))
         {
             if (IsGrounded())
             {
@@ -77,7 +88,7 @@ public class PlayerController : MonoBehaviour
                 _isFalling = false;
             }
         }
-        else if (verticalVelocity < -0.1f && !_isFalling)
+        else if (verticalVelocity < -0.1f && !_isFalling && !IsGrounded())
         {
             _animator.SetBool("IsJumping", false);
             _animator.SetBool("IsFalling", true);
@@ -85,13 +96,47 @@ public class PlayerController : MonoBehaviour
             _isJumping = false;
             _isFalling = true;
         }
+        //TODO handle step climbing
+        // else if(_isRunning && IsStepAhead(_rigidbody.velocity.x > 0 ? 1 : -1))
+        // {
+        //     transform.Translate(Vector3.up * (_blockStepSize + 0.01f));
+        // }
     }
 
     private bool IsGrounded()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, _fallDistanceThreshold, groundLayerMask);
+        RaycastHit2D hitVert =
+            Physics2D.Raycast(transform.position, Vector2.down, _fallDistanceThreshold, groundLayerMask);
 
-        if (hit.collider)
+        if (hitVert.collider)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool IsDirBlocked(int dir)
+    {
+        RaycastHit2D hitVert =
+            Physics2D.Raycast(transform.position + Vector3.up * (_blockStepSize + 0.3f), Vector2.right * dir,
+                _blockDistanceThreshold, blockLayerMask);
+
+        if (hitVert.collider)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool IsStepAhead(int dir)
+    {
+        RaycastHit2D hitVert =
+            Physics2D.Raycast(transform.position + Vector3.up * _blockStepSize, Vector2.right * dir,
+                _blockDistanceThreshold, blockLayerMask);
+
+        if (hitVert.collider)
         {
             return true;
         }
