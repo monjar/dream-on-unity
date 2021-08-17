@@ -170,7 +170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ShadowGroup: 0
   m_HasRenderer: 1
-  m_UseRendererSilhouette: 1
+  m_UseRendererSilhouette: 0
   m_CastsShadows: 1
   m_SelfShadows: 0
   m_ApplyToSortingLayers: 00000000
@@ -180,7 +180,7 @@ MonoBehaviour:
   - {x: 0.020877361, y: 0.049770564, z: 0}
   m_ShapePathHash: -1802493929
   m_Mesh: {fileID: 0}
-  m_InstanceId: -3548
+  m_InstanceId: 31304
 --- !u!95 &4709777638680795634
 Animator:
   serializedVersion: 3
