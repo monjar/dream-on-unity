@@ -23,14 +23,15 @@ public class PlayerInputHandler : MonoBehaviour
         {
             _playerController.Jump();
         }
-        if(Input.GetButtonDown("Fire") && _rewindable.Status == RewindStatus.NONE)
-            _rewindable.StartRecording();
-        else if(Input.GetButtonDown("Fire") && _rewindable.Status == RewindStatus.RECORDING)
-        {
-            _rewindable.StartRewinding();
-        }else if(Input.GetButtonDown("Fire") && _rewindable.Status == RewindStatus.REWINDING)
-        {
-            _rewindable.Resume();
-        }
+        //TODO Add rewind mechanic inputs
+        // if(Input.GetButtonDown("Fire") && _rewindable.Status == RewindStatus.NONE)
+        //     _rewindable.StartRecording();
+        // else if(Input.GetButtonDown("Fire") && _rewindable.Status == RewindStatus.RECORDING)
+        // {
+        //     _rewindable.StartRewinding();
+        // }else if(Input.GetButtonDown("Fire") && _rewindable.Status == RewindStatus.REWINDING)
+        // {
+        //     _rewindable.Resume();
+        // }
     }
 }
