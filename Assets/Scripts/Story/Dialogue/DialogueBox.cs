@@ -7,19 +7,17 @@ using UnityEngine;
 public class DialogueBox : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI textMesh;
+    [SerializeField] private DialogueGraph graph;
     private List<DialogueLine> _dialogueLines = new List<DialogueLine>();
+
     private int nextDialogueIndex = 0;
 
-    public void PushLine(DialogueLine line)
+    public void UpdateLines()
     {
-        _dialogueLines.Add(line);
+        _dialogueLines = graph.GetCurrentLines();
     }
 
-    public void ClearLines()
-    {
-        _dialogueLines.Clear();
-        nextDialogueIndex = 0;
-    }
+    
 
     private DialogueLine GetNextLine()
     {
@@ -33,8 +31,7 @@ public class DialogueBox : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.M))
         {
-            var dialogue = new DialogueLine("me", _dialogueLines.Count + " Hello There Fellow Traveler");
-            PushLine(dialogue);
+            UpdateLines();
         }
 
         if (Input.GetKeyDown(KeyCode.N))

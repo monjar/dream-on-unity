@@ -6,10 +6,9 @@ using UnityEngine;
 [Serializable]
 public class DialogueLine
 {
-    [SerializeField] private string from;
+    private string from;
     [SerializeField] private string body;
-    [SerializeField] private float waitSecondsAfterType = 3;
-    [SerializeField] private DialogueLine next = null;
+    private float waitSecondsAfterType = 3;
 
 
     public float WaitSecondsAfterType => waitSecondsAfterType;
@@ -18,12 +17,7 @@ public class DialogueLine
         this.from = from;
         this.body = body;
     }
-    public DialogueLine(string from, string body, DialogueLine next)
-    {
-        this.from = from;
-        this.body = body;
-        this.next = next;
-    }
+    
     public string Body => body;
 
     public string From => from;
