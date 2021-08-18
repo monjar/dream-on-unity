@@ -10,5 +10,6 @@ public class DialogueResponse
     [SerializeField] private int nextQuestionIndex;
 
 
+    public DialogueLine Line => line;
     public int NextQuestionIndex => nextQuestionIndex;
 }

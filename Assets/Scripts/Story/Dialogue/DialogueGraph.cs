@@ -30,6 +30,7 @@ public class DialogueGraph : MonoBehaviour
 
     public void Answer(int answerIndex)
     {
+        print(answerIndex);
         var dialogueNode = currentNode.AnswerNode(answerIndex);
         this.currentNode = dialogueNode;
         box.ResetIndex();

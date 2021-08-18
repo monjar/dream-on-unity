@@ -51,6 +51,8 @@ public class DialogueBox : MonoBehaviour
         var line = GetNextLine();
         if (line == null)
         {
+            var playerAnswer = FindObjectOfType<PlayerDialogueBox>();
+            playerAnswer.ShowAnswers(graph);
             ResetIndex();
             GetNextLine();
         }
