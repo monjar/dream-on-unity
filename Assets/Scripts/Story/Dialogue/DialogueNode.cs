@@ -18,6 +18,8 @@ public class DialogueNode
     public List<DialogueResponse> Responses => responses;
     public DialogueNode AnswerNode(int responseIndex)
     {
+        if (responseIndex >= responses.Count)
+            return this;
         var selectedResponse = responses[responseIndex];
         var nextQuestion = nexts[selectedResponse.NextQuestionIndex];
         return nextQuestion;

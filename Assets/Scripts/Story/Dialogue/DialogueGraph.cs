@@ -8,8 +8,16 @@ public class DialogueGraph : MonoBehaviour
     [SerializeField]
     private DialogueNode root;
     private DialogueNode currentNode;
+    private DialogueBox box;
 
 
+    private void Start()
+    {
+        currentNode = root;
+        box = GetComponent<DialogueBox>();
+    }
+
+   
     public List<DialogueLine> GetCurrentLines()
     {
         return currentNode.Lines;
@@ -24,7 +32,11 @@ public class DialogueGraph : MonoBehaviour
     {
         var dialogueNode = currentNode.AnswerNode(answerIndex);
         this.currentNode = dialogueNode;
+        box.ResetIndex();
+        box.Show();
+
     }
+    
     
     
 }

@@ -7,31 +7,33 @@ using UnityEngine;
 public class DialogueBox : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI textMesh;
-    [SerializeField] private DialogueGraph graph;
-    private List<DialogueLine> _dialogueLines = new List<DialogueLine>();
+    private DialogueGraph graph;
 
     private int nextDialogueIndex = 0;
 
-    public void UpdateLines()
+    private void Start()
     {
-        _dialogueLines = graph.GetCurrentLines();
+        graph = GetComponent<DialogueGraph>();
     }
-
-    
 
     private DialogueLine GetNextLine()
     {
         var nextLine =
-            nextDialogueIndex == _dialogueLines.Count ? null : _dialogueLines[nextDialogueIndex];
+            nextDialogueIndex == graph.GetCurrentLines().Count ? null : graph.GetCurrentLines()[nextDialogueIndex];
         nextDialogueIndex++;
         return nextLine;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            UpdateLines();
+            graph.Answer(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            graph.Answer(1);
         }
 
         if (Input.GetKeyDown(KeyCode.N))
@@ -48,7 +50,10 @@ public class DialogueBox : MonoBehaviour
             StopCoroutine(currentTypeRoutine);
         var line = GetNextLine();
         if (line == null)
-            Close();
+        {
+            ResetIndex();
+            GetNextLine();
+        }
         else
         {
             currentTypeRoutine = TypeDialogue(line);
@@ -62,6 +67,11 @@ public class DialogueBox : MonoBehaviour
         textMesh.text = "";
         nextDialogueIndex = 0;
     }
+    
+    public void ResetIndex()
+    {
+        nextDialogueIndex = 0;
+    }
 
     private IEnumerator TypeDialogue(DialogueLine line)
     {
@@ -71,5 +81,11 @@ public class DialogueBox : MonoBehaviour
             textMesh.text += character;
             yield return new WaitForSeconds(0.05f);
         }
+    }
+
+
+    private void OnMouseDown()
+    {
+        Show();
     }
 }
