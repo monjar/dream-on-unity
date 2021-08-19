@@ -28,6 +28,15 @@ public class DialogueGraph : MonoBehaviour
         return currentNode.Responses;
     }
 
+    public bool IsFinalNode()
+    {
+        return currentNode.IsNextsEmpty();
+    }
+    
+    public void ResetGraph()
+    {
+        currentNode = root;
+    }
     public void Answer(int answerIndex)
     {
         print(answerIndex);

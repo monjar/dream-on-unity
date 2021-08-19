@@ -16,6 +16,7 @@ public class DialogueNode
     public List<DialogueLine> Lines => lines;
 
     public List<DialogueResponse> Responses => responses;
+
     public DialogueNode AnswerNode(int responseIndex)
     {
         if (responseIndex >= responses.Count)
@@ -24,5 +25,9 @@ public class DialogueNode
         var nextQuestion = nexts[selectedResponse.NextQuestionIndex];
         return nextQuestion;
     }
-    
+
+    public bool IsNextsEmpty()
+    {
+        return nexts.Count == 0;
+    }
 }

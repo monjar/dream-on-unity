@@ -8,12 +8,12 @@ public class DialogueBox : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI textMesh;
     private DialogueGraph graph;
-
+    private Animator animator;
     private int nextDialogueIndex = 0;
-
     private void Start()
     {
         graph = GetComponent<DialogueGraph>();
+        animator = GetComponent<Animator>();
     }
 
     private DialogueLine GetNextLine()
@@ -38,26 +38,48 @@ public class DialogueBox : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.N))
         {
-            Show();
+            OpenDialogue();
         }
+    }
+
+    public void OpenDialogue()
+    {
+        StartCoroutine(OpenDialogueAsync());
+    }
+
+    private IEnumerator OpenDialogueAsync()
+    {
+        animator.SetTrigger("Open");
+        yield return new WaitForSeconds(0.5f);
+        Show();
     }
 
     private IEnumerator currentTypeRoutine;
 
-    public void Show()
+    public void Show(float closeDelay = 0f)
     {
         if (currentTypeRoutine != null)
         {
             StopCoroutine(currentTypeRoutine);
             textMesh.text = currentLine.Body;
         }
+
         var line = GetNextLine();
         if (line == null)
         {
-            var playerAnswer = FindObjectOfType<PlayerDialogueBox>();
-            playerAnswer.ShowAnswers(graph);
-            ResetIndex();
-            GetNextLine();
+            if (graph.IsFinalNode())
+            {
+                StartCoroutine(CloseAfter(closeDelay));
+            }
+            else
+            {
+                var playerAnswer = FindObjectOfType<PlayerDialogueBox>();
+                playerAnswer.ShowAnswers(graph);
+                ResetIndex();
+                GetNextLine();
+            }
+          
+           
         }
         else
         {
@@ -66,19 +88,23 @@ public class DialogueBox : MonoBehaviour
         }
     }
 
-    public void Close()
+    public IEnumerator CloseAfter(float delay = 0)
     {
+        yield return new WaitForSeconds(delay);
         StopAllCoroutines();
         textMesh.text = "";
         nextDialogueIndex = 0;
+        graph.ResetGraph();
+        animator.SetTrigger("Close");
     }
-    
+
     public void ResetIndex()
     {
         nextDialogueIndex = 0;
     }
 
     private DialogueLine currentLine;
+
     private IEnumerator TypeDialogue(DialogueLine line)
     {
         currentLine = line;
@@ -90,7 +116,7 @@ public class DialogueBox : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.2f);
-        Show();
+        Show(1f);
     }
 
 
