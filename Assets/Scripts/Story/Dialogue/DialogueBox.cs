@@ -47,7 +47,10 @@ public class DialogueBox : MonoBehaviour
     public void Show()
     {
         if (currentTypeRoutine != null)
+        {
             StopCoroutine(currentTypeRoutine);
+            textMesh.text = currentLine.Body;
+        }
         var line = GetNextLine();
         if (line == null)
         {
@@ -75,14 +78,19 @@ public class DialogueBox : MonoBehaviour
         nextDialogueIndex = 0;
     }
 
+    private DialogueLine currentLine;
     private IEnumerator TypeDialogue(DialogueLine line)
     {
+        currentLine = line;
         textMesh.text = "";
         foreach (var character in line.Body.ToCharArray())
         {
             textMesh.text += character;
             yield return new WaitForSeconds(0.05f);
         }
+
+        yield return new WaitForSeconds(0.2f);
+        Show();
     }
 
 
