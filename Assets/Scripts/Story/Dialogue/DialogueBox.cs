@@ -10,6 +10,7 @@ public class DialogueBox : MonoBehaviour
     private DialogueGraph graph;
     private Animator animator;
     private int nextDialogueIndex = 0;
+    private bool isOpen = false;
     private void Start()
     {
         graph = GetComponent<DialogueGraph>();
@@ -18,10 +19,14 @@ public class DialogueBox : MonoBehaviour
 
     private DialogueLine GetNextLine()
     {
-        var nextLine =
-            nextDialogueIndex == graph.GetCurrentLines().Count ? null : graph.GetCurrentLines()[nextDialogueIndex];
+        if (nextDialogueIndex == graph.GetCurrentLines().Count)
+        {
+            return null;
+        }
+        var nextLine = graph.GetCurrentLines()[nextDialogueIndex];
+        
         nextDialogueIndex++;
-        return nextLine;
+            return nextLine;
     }
 
     private void Update()
@@ -44,6 +49,9 @@ public class DialogueBox : MonoBehaviour
 
     public void OpenDialogue()
     {
+        if(isOpen)
+            return;
+        isOpen = true;
         StartCoroutine(OpenDialogueAsync());
     }
 
@@ -76,7 +84,6 @@ public class DialogueBox : MonoBehaviour
                 var playerAnswer = FindObjectOfType<PlayerDialogueBox>();
                 playerAnswer.ShowAnswers(graph);
                 ResetIndex();
-                GetNextLine();
             }
           
            
@@ -96,6 +103,7 @@ public class DialogueBox : MonoBehaviour
         nextDialogueIndex = 0;
         graph.ResetGraph();
         animator.SetTrigger("Close");
+        isOpen = false;
     }
 
     public void ResetIndex()
